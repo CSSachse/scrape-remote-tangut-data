@@ -1,0 +1,21 @@
+{
+  "name": "tangut-data",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn install --frozen-lockfile && rm -r dist &; tsc",
+    "exeq": "node dist/Test.js",
+    "buildnrun": "yarn build && yarn exeq"
+  },
+  "devDependencies": {
+    "@types/puppeteer": "^1.19.0",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^6.0.4",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "puppeteer": "^1.19.0"
+  }
+}

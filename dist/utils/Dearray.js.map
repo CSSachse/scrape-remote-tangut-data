@@ -1,0 +1,1 @@
+{"version":3,"file":"Dearray.js","sourceRoot":"","sources":["../../src/utils/Dearray.ts"],"names":[],"mappings":"","sourcesContent":["// tslint:disable-next-line: no-any\ntype Dearray<T extends Array<any>> = T extends (infer U)[] ? U : never;\n"]}

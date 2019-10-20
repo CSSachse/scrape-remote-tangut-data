@@ -1,0 +1,193 @@
+{
+  "rules": {
+    "member-access": [
+      true,
+      "check-accessor",
+      "check-constructor"
+    ],
+    "member-ordering": false,
+    "no-any": true,
+    "no-floating-promises": true,
+    "no-inferrable-types": false,
+    "no-internal-module": true,
+    "no-namespace": false,
+    "no-reference": true,
+    "no-var-requires": true,
+    "typedef": [
+      true,
+      "call-signature",
+      "parameter",
+      "property-declaration",
+      "member-variable-declaration"
+    ],
+
+    "typedef-whitespace": [
+      true,
+      {
+        "call-signature": "nospace",
+        "index-signature": "nospace",
+        "parameter": "nospace",
+        "property-declaration": "nospace",
+        "variable-declaration": "nospace"
+      },
+      {
+        "call-signature": "onespace",
+        "index-signature": "onespace",
+        "parameter": "onespace",
+        "property-declaration": "onespace",
+        "variable-declaration": "onespace"
+      }
+    ],
+    "ban": false,
+    "curly": true,
+    "forin": true,
+    "label-position": true,
+    "no-arg": true,
+    "no-bitwise": false,
+    "no-conditional-assignment": true,
+    "no-console": [
+      true,
+      "debug",
+      "info",
+      "log",
+      "time",
+      "timeEnd",
+      "trace"
+    ],
+    "no-construct": true,
+    "no-debugger": true,
+    "no-duplicate-variable": true,
+    "no-empty": true,
+    "no-eval": true,
+    "no-invalid-this": [
+      true,
+      "check-function-in-method"
+    ],
+    "no-null-keyword": false,
+    "no-shadowed-variable": true,
+    "no-string-literal": true,
+    "no-switch-case-fall-through": true,
+    "no-unused-expression": true,
+    "no-unused-variable": [
+      false
+    ],
+    "no-use-before-declare": false,
+    "no-var-keyword": true,
+    "radix": true,
+    "triple-equals": true,
+    "use-isnan": true,
+    "eofline": true,
+    "indent": [
+      true,
+      "spaces"
+    ],
+    "linebreak-style": [
+      true,
+      "LF"
+    ],
+    "max-line-length": [
+      true,
+      140
+    ],
+    "no-default-export": true,
+    "no-mergeable-namespace": true,
+    "no-require-imports": true,
+    "no-trailing-whitespace": true,
+    "object-literal-sort-keys": false,
+    "deprecation": {"severity": "warn"},
+    "align": [
+      true,
+      "parameters",
+      "arguments",
+      "statements"
+    ],
+
+    "class-name": true,
+
+    "comment-format": [
+      true,
+      "check-space"
+    ],
+
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
+
+    "jsdoc-format": false,
+
+    "new-parens": true,
+    "no-angle-bracket-type-assertion": false,
+    "one-line": [
+      true,
+      "check-catch",
+      "check-finally",
+      "check-else",
+      "check-open-brace",
+      "check-whitespace"
+    ],
+    "one-variable-per-declaration": [
+      true,
+      "ignore-for-loop"
+    ],
+    "quotemark": [
+      true,
+      "single",
+      "avoid-escape"
+    ],
+    "semicolon": [
+      true,
+      "always"
+    ],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-module",
+      "check-separator",
+      "check-type",
+      "check-typecast"
+    ],
+    "file-name-casing": [
+      true,
+      "pascal-case"
+    ],
+    "import-blacklist": [
+      true,
+      [
+        ".*/lib/.*"
+      ]
+    ],
+    "no-consecutive-blank-lines": true,
+    "number-literal-format": true,
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "any"
+      }
+    ],
+    "prefer-const": true,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": {
+          "objects": "always",
+          "arrays": "always",
+          "imports": "always",
+          "exports": "always"
+        },
+        "singleline": "never",
+        "esSpecCompliant": true
+      }
+    ],
+    "unnecessary-bind": true,
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore",
+      "allow-pascal-case"
+    ]
+  }
+}
