@@ -21,7 +21,7 @@ exports.getData = async () => {
             counter += 1;
             return `${counter}`;
         };
-        // tslint:disable: max-line-length
+        // tslint:disable-next-line:max-line-length
         const findAllNextSiblingMatchingButStopAt = (el, matcher, shouldStop) => {
             if (el === null || shouldStop(el)) {
                 return [null];
@@ -33,42 +33,112 @@ exports.getData = async () => {
                 return findAllNextSiblingMatchingButStopAt(el.nextElementSibling, matcher, shouldStop);
             }
         };
-        class RootPopulator {
+        class ExtractorNode {
             constructor(el) {
                 this.el = el;
                 this.guid = getGuid();
-                this.childSupergroups = [];
+                this.children = [];
+            }
+            get childGuids() {
+                return this.children.filter(s => s).map(s => s.guid);
+            }
+        }
+        class RootPopulator extends ExtractorNode {
+            constructor() {
+                super(...arguments);
                 this.populate = async () => {
-                    this.childSupergroups = Array.from(findNextSiblingMatching(headers.filter((element) => {
+                    this.children = Array.from(findNextSiblingMatching(headers.filter((element) => {
                         return element.textContent === 'Arrangement of Radicals';
                     })[0], (elem) => elem.tagName === 'UL').querySelectorAll('a'))
-                        .map(a => a.href.split('#')[1])
-                        .map(t => document.querySelectorAll(`a[name="${t}"]`)[0].nextElementSibling)
-                        .map(e => new RadicalSupergroup(e));
-                    await Promise.all(this.childSupergroups.map(supergroup => supergroup.populate));
+                        .map(x => x.href.split('#')[1])
+                        .map(x => document.querySelectorAll(`a[name="${x}"]`)[0].nextElementSibling)
+                        .map(x => new RadicalSupergroup(x));
+                    this.children.forEach(child => child.populate());
+                    // Promise.all(this.children.map(supergroup => supergroup.populate));  // TODO: figure out why this doesn't work
                 };
             }
             get data() {
-                return {};
-            }
-            get childSupergroupGuids() {
-                return this.childSupergroups.map(s => s.guid);
+                return undefined;
             }
         }
-        class RadicalSupergroup {
-            constructor(el) {
-                this.el = el;
-                this.guid = getGuid();
+        class RadicalSupergroup extends ExtractorNode {
+            constructor() {
+                super(...arguments);
+                this.populate = async () => {
+                    this.children = Array.from(findAllNextSiblingMatchingButStopAt(this.el.nextElementSibling, z => z.tagName === 'H4', z => z.tagName === 'H3')
+                        .filter(x => x)
+                        .map(x => new RadicalGroup(x)));
+                    this.children.forEach(child => child.populate());
+                };
+            }
+            get data() { return this.el.textContent; }
+        }
+        class RadicalGroup extends ExtractorNode {
+            constructor() {
+                super(...arguments);
+                this.populate = async () => {
+                    this.children = Array.from(findNextSiblingMatching(this.el, z => z.tagName === 'TABLE')
+                        .querySelectorAll('a'))
+                        .filter(x => x)
+                        .map(x => new Radical(x));
+                    this.children.forEach(child => child.populate());
+                };
+            }
+            get data() { return this.el.textContent; }
+        }
+        class Radical extends ExtractorNode {
+            constructor() {
+                super(...arguments);
+                this.populate = async () => {
+                    const aname = this.el.href.split('#')[1];
+                    const header = document.querySelectorAll(`a[name="${aname}"]`)[0].nextElementSibling;
+                    const groupings = findAllNextSiblingMatchingButStopAt(header.nextElementSibling, (z) => z.tagName === 'H4', z => z.tagName === 'H3')
+                        .filter(z => z);
+                    if (groupings.length === 0) {
+                        this.children = [new StrokeCountGroupings(header)];
+                    }
+                    else {
+                        this.children = Array.from(groupings.map(x => new StrokeCountGroupings(x)));
+                    }
+                    this.children.forEach(child => child.populate());
+                };
+            }
+            get data() { return this.el.textContent; }
+        }
+        class StrokeCountGroupings extends ExtractorNode {
+            constructor() {
+                super(...arguments);
+                this.populate = async () => {
+                    this.children = Array.from(findNextSiblingMatching(this.el, z => z.tagName === 'TABLE')
+                        .querySelectorAll('tr'))
+                        .map(x => new Character(x));
+                    this.children.forEach(child => child.populate());
+                };
+            }
+            get data() { return this.el.textContent; }
+        }
+        class Character extends ExtractorNode {
+            constructor() {
+                super(...arguments);
                 this.populate = async () => {
                     return Promise.resolve();
                 };
-                console.error(el);
             }
-            get data() { return {}; }
+            get data() {
+                const featurized = Array.from(this.el.querySelectorAll('td, th'));
+                return {
+                    characterMojikyo: featurized[0].textContent,
+                    characterFont: featurized[0].className,
+                    romanization: featurized[2].textContent,
+                    decimalIndex: featurized[3].textContent,
+                    romanIndex: featurized[4].textContent,
+                    characterId: featurized[5].textContent,
+                };
+            }
         }
         const root = new RootPopulator(null);
         await root.populate();
-        console.error(JSON.stringify(root));
+        console.error(root); // JSON.stringify(root));
     });
     // await browser.close();
 };
